@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post, Comment
 from .serializer import PostSerializer
+import time
+from weblog.celery import app
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -12,11 +14,23 @@ from rest_framework.views import APIView
 
 
 
-@api_view(['GET'])
 def welcom(request):
-  return Response({
-     "message": "welcome to blog"
-  })
+  test.delay()
+  return HttpResponse('welcome to blog')
+
+
+@app.task
+def test():
+   time.sleep(10)
+
+
+
+@app.task
+def test2():
+   file = open('test.txt', 'a')
+   file.write('Hello ')
+   file.close
+
 
 
 
@@ -40,7 +54,7 @@ class Posts(APIView):
              'price': openapi.Schema(type=openapi.TYPE_NUMBER, description='قیمت محصول'),
          }
         ),
-      # request_body = PostSerializer,
+         # request_body = PostSerializer,
          responses = {
             201 : 'create',
             400: 'bad request'
@@ -60,6 +74,8 @@ class Posts(APIView):
       posts = Post.objects.all()
       serializer = PostSerializer(posts, many= True)
       return Response(serializer.data)
+   
+
 
 
 

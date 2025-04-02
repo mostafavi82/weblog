@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from posts.views import welcom, post_detail,Posts
+from posts.views import welcom, post_detail,Posts, test2
 from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -41,5 +41,6 @@ urlpatterns = [
     path('welcome/' , welcom),
     path('posts/', Posts.as_view() ),
     path('posts/<int:post_id>/', post_detail ),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('test2/' , test2),
 ]
